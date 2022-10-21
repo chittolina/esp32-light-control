@@ -22,7 +22,7 @@ export const App = () => {
 
   useEffect(() => {
     fetch();
-    setInterval(fetch, 500);
+    // setInterval(fetch, 500);
   }, []);
 
   const fetch = async () => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Heading,
@@ -11,6 +11,7 @@ import {
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
+  Text,
 } from "@chakra-ui/react";
 
 interface Props {
@@ -35,11 +36,17 @@ export const Settings: React.FC<Props> = ({ luminosity, lampTime, onSave }) => {
   const [currentLuminosity, setCurrentLuminosity] = useState(luminosity);
   const [currentLampTime, setCurrentLampTime] = useState(lampTime);
 
+  useEffect(() => {
+    setCurrentLuminosity(luminosity);
+    setCurrentLampTime(lampTime);
+  }, [luminosity, lampTime]);
+
   return (
     <>
       <Heading size="md" style={{ marginBottom: "32px" }}>
         Configurações
       </Heading>
+      <Text>Sensibilidade</Text>
       <Slider
         defaultValue={currentLuminosity}
         value={currentLuminosity}
@@ -75,17 +82,22 @@ export const Settings: React.FC<Props> = ({ luminosity, lampTime, onSave }) => {
       </Slider>
 
       <InputGroup style={{ marginTop: "32px" }}>
-        <InputLeftAddon children="Intervalo de atualização" />
+        <InputLeftAddon children="Tempo ligada" />
         <Input
           value={currentLampTime}
           onChange={(e) => setCurrentLampTime(Number(e.target.value))}
         />
-        <InputRightAddon children="ms" />
+        <InputRightAddon children="segundos" />
       </InputGroup>
 
       <Button
         colorScheme="blue"
-        onClick={() => onSave({ luminosity, lampTime })}
+        onClick={() =>
+          onSave({
+            luminosity: currentLuminosity,
+            lampTime: currentLampTime * 1000,
+          })
+        }
         style={{ width: "100%", marginTop: "50px" }}
       >
         Salvar
