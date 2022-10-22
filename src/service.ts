@@ -15,7 +15,7 @@ class Client {
   private client: AxiosInstance;
 
   constructor() {
-    this.client = axios.create({ baseURL: "http://localhost:8080" });
+    this.client = axios.create({ baseURL: "http://192.168.137.166" });
   }
 
   public async getCurrentState(): Promise<CurrentState> {
