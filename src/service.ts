@@ -1,14 +1,21 @@
 import axios, { AxiosInstance } from "axios";
 
 export interface UpdateVariables {
-  lamp_sensibility: number;
-  lamp_time: number;
+  min_luminosity: number;
+  min_temp: number;
+  max_temp: number;
+  min_humidity: number;
 }
 
 interface CurrentState {
-  lamp_sensibility: number;
-  lamp_time: number;
-  lamp_state: number;
+  min_luminosity: number;
+  min_temp: number;
+  max_temp: number;
+  min_humidity: number;
+  lamp_incandenscent: boolean;
+  lamp_fluorescent: boolean;
+  temp: number;
+  humidity: number;
 }
 
 class Client {
@@ -19,14 +26,23 @@ class Client {
   }
 
   public async getCurrentState(): Promise<CurrentState> {
-    const { data } = await this.client.get("lamp-status");
-    const { lamp_sensibility, lamp_time, lamp_state } = data;
+    // const { data } = await this.client.get("status");
+    // const { lamp_sensibility, lamp_time, lamp_state } = data;
 
-    return { lamp_sensibility, lamp_time, lamp_state };
+    return Promise.resolve({
+      min_luminosity: 1000,
+      min_temp: 25,
+      max_temp: 30,
+      min_humidity: 50,
+      lamp_fluorescent: true,
+      lamp_incandenscent: false,
+      humidity: 79,
+      temp: 38,
+    });
   }
 
   public async updateSettings(data: UpdateVariables) {
-    const res = await this.client.post("update-variables", data);
+    const res = await this.client.post("update", data);
     return res.status === 200;
   }
 }

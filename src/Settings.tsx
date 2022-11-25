@@ -15,14 +15,20 @@ import {
 } from "@chakra-ui/react";
 
 interface Props {
-  luminosity: number;
-  lampTime: number;
+  minTemp: number;
+  maxTemp: number;
+  minLuminosity: number;
+  minHumidity: number;
   onSave: ({
-    luminosity,
-    lampTime,
+    minLuminosity,
+    minTemp,
+    maxTemp,
+    minHumidity,
   }: {
-    luminosity: number;
-    lampTime: number;
+    minTemp: number;
+    maxTemp: number;
+    minLuminosity: number;
+    minHumidity: number;
   }) => void;
 }
 
@@ -30,27 +36,38 @@ const labelStyles = {
   fontSize: "md",
 };
 
-export const Settings: React.FC<Props> = ({ luminosity, lampTime, onSave }) => {
-  const [currentLuminosity, setCurrentLuminosity] = useState(luminosity);
-  const [currentLampTime, setCurrentLampTime] = useState(lampTime);
+export const Settings: React.FC<Props> = ({
+  minTemp,
+  maxTemp,
+  minLuminosity,
+  minHumidity,
+  onSave,
+}) => {
+  const [currentMinLuminosity, setCurrentMinLuminosity] =
+    useState(minLuminosity);
+  const [currentMinTemp, setCurrentMinTemp] = useState(minTemp);
+  const [currentMaxTemp, setCurrentMaxTemp] = useState(maxTemp);
+  const [currentMinHumidity, setCurrentMinHumidity] = useState(minHumidity);
 
   useEffect(() => {
-    setCurrentLuminosity(luminosity);
-    setCurrentLampTime(lampTime);
-  }, [luminosity, lampTime]);
+    setCurrentMinTemp(minTemp);
+    setCurrentMaxTemp(maxTemp);
+    setCurrentMinLuminosity(minLuminosity);
+    setCurrentMinHumidity(minHumidity);
+  }, [minTemp, maxTemp, minLuminosity, minHumidity]);
 
   return (
     <>
       <Heading size="md" style={{ marginBottom: "32px" }}>
         Configurações
       </Heading>
-      <Text>Sensibilidade</Text>
+      <Text>Sensibilidade da luz</Text>
       <Slider
-        defaultValue={currentLuminosity}
-        value={currentLuminosity}
+        defaultValue={currentMinLuminosity}
+        value={currentMinLuminosity}
         min={0}
         max={4095}
-        onChange={(value) => setCurrentLuminosity(value)}
+        onChange={(value) => setCurrentMinLuminosity(value)}
       >
         <SliderMark value={1000} {...labelStyles}>
           1000
@@ -62,7 +79,7 @@ export const Settings: React.FC<Props> = ({ luminosity, lampTime, onSave }) => {
           3000
         </SliderMark>
         <SliderMark
-          value={currentLuminosity}
+          value={currentMinLuminosity}
           textAlign="center"
           bg="blue.500"
           color="white"
@@ -71,7 +88,7 @@ export const Settings: React.FC<Props> = ({ luminosity, lampTime, onSave }) => {
           w="14"
           fontSize="sm"
         >
-          {currentLuminosity}
+          {currentMinLuminosity}
         </SliderMark>
         <SliderTrack>
           <SliderFilledTrack />
@@ -80,20 +97,40 @@ export const Settings: React.FC<Props> = ({ luminosity, lampTime, onSave }) => {
       </Slider>
 
       <InputGroup style={{ marginTop: "32px" }}>
-        <InputLeftAddon children="Tempo ligada" />
+        <InputLeftAddon children="Temperatura mínima" />
         <Input
-          value={currentLampTime}
-          onChange={(e) => setCurrentLampTime(Number(e.target.value))}
+          value={currentMinTemp}
+          onChange={(e) => setCurrentMinTemp(Number(e.target.value))}
         />
         <InputRightAddon children="segundos" />
+      </InputGroup>
+
+      <InputGroup style={{ marginTop: "32px" }}>
+        <InputLeftAddon children="Temperatura máxima" />
+        <Input
+          value={currentMaxTemp}
+          onChange={(e) => setCurrentMaxTemp(Number(e.target.value))}
+        />
+        <InputRightAddon children="°C" />
+      </InputGroup>
+
+      <InputGroup style={{ marginTop: "32px" }}>
+        <InputLeftAddon children="Umidade mínima" />
+        <Input
+          value={currentMinHumidity}
+          onChange={(e) => setCurrentMinHumidity(Number(e.target.value))}
+        />
+        <InputRightAddon children="%" />
       </InputGroup>
 
       <Button
         colorScheme="blue"
         onClick={() =>
           onSave({
-            luminosity: currentLuminosity,
-            lampTime: currentLampTime * 1000,
+            minLuminosity: currentMinLuminosity,
+            minTemp: currentMinTemp,
+            maxTemp: currentMaxTemp,
+            minHumidity: currentMinHumidity,
           })
         }
         style={{ width: "100%", marginTop: "50px" }}

@@ -18,8 +18,13 @@ export const App = () => {
   const [isFetching, setIsFetching] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   const [minLuminosity, setMinLuminosity] = useState(1000);
-  const [lampTime, setLampTime] = useState(120);
-  const [lampState, setLampState] = useState(false);
+  const [minTemp, setMinTemp] = useState(15);
+  const [maxTemp, setMaxTemp] = useState(30);
+  const [minHumidity, setMinHumidity] = useState(100);
+  const [temp, setTemp] = useState(0);
+  const [humidity, setHumidity] = useState(0);
+  const [incandenscentLampState, setIncandescentLampState] = useState(false);
+  const [fluorescentLampState, setFluorescentLampState] = useState(false);
 
   useEffect(() => {
     fetch();
@@ -33,9 +38,14 @@ export const App = () => {
 
     try {
       const state = await Service.getCurrentState();
-      setMinLuminosity(state.lamp_sensibility);
-      setLampState(!!state.lamp_state);
-      setLampTime(state.lamp_time / 1000);
+      setIncandescentLampState(state.lamp_incandenscent);
+      setFluorescentLampState(state.lamp_fluorescent);
+      setMinLuminosity(state.min_luminosity);
+      setMinTemp(state.min_temp);
+      setMaxTemp(state.max_temp);
+      setMinHumidity(state.min_humidity);
+      setHumidity(state.humidity);
+      setTemp(state.temp);
     } catch (err) {
       console.log("err:", err);
     }
@@ -74,19 +84,36 @@ export const App = () => {
               ) : (
                 <>
                   <Box>
-                    <State lampState={lampState} />
+                    <State
+                      incandenscentLampState={incandenscentLampState}
+                      fluorescentLampState={fluorescentLampState}
+                      temp={temp}
+                      humidity={humidity}
+                    />
                   </Box>
                   <Divider />
                   <Box>
                     <Settings
-                      luminosity={minLuminosity}
-                      lampTime={lampTime}
-                      onSave={({ luminosity, lampTime }) => {
-                        setMinLuminosity(luminosity);
-                        setLampTime(lampTime);
+                      minLuminosity={minLuminosity}
+                      minTemp={minTemp}
+                      maxTemp={maxTemp}
+                      minHumidity={minHumidity}
+                      onSave={({
+                        minLuminosity,
+                        minTemp,
+                        maxTemp,
+                        minHumidity,
+                      }) => {
+                        setMinLuminosity(minLuminosity);
+                        setMinTemp(minTemp);
+                        setMaxTemp(maxTemp);
+                        setMinHumidity(minHumidity);
+
                         update({
-                          lamp_sensibility: luminosity,
-                          lamp_time: lampTime,
+                          min_luminosity: minLuminosity,
+                          min_temp: minTemp,
+                          max_temp: maxTemp,
+                          min_humidity: minHumidity,
                         });
                       }}
                     />
