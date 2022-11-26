@@ -26,8 +26,8 @@ class Client {
   }
 
   public async getCurrentState(): Promise<CurrentState> {
-    // const { data } = await this.client.get("status");
-    // const { lamp_sensibility, lamp_time, lamp_state } = data;
+    const { data } = await this.client.get("status");
+    // return data;
 
     return Promise.resolve({
       min_luminosity: 1000,
@@ -42,6 +42,7 @@ class Client {
   }
 
   public async updateSettings(data: UpdateVariables) {
+    return Promise.resolve(true);
     const res = await this.client.post("update", data);
     return res.status === 200;
   }

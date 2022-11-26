@@ -102,7 +102,7 @@ export const Settings: React.FC<Props> = ({
           value={currentMinTemp}
           onChange={(e) => setCurrentMinTemp(Number(e.target.value))}
         />
-        <InputRightAddon children="segundos" />
+        <InputRightAddon children="°C" />
       </InputGroup>
 
       <InputGroup style={{ marginTop: "32px" }}>

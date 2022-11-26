@@ -23,12 +23,12 @@ export const State: React.FC<Props> = ({
             as="span"
             style={{
               textTransform: "uppercase",
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: "bold",
               letterSpacing: "0.5px",
             }}
           >
-            Lamp. Incandescente
+            Lamp. Incandenscente
           </Text>
 
           {incandenscentLampState ? (
